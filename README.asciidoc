@@ -57,8 +57,9 @@ Make sure JBossEAP is fully booted up before you start the seeding
 ant seed
 ....
 This will upload the ontologies as well as the workflows. You can verify
-success using the s-ramp-ui. For now you will need to reboot JBossEAP
-to activate the workflows.
+success using the s-ramp-ui. For now you will need to *reboot* JBossEAP
+to activate the workflows. Demos for both S-RAMP and DTGov are available in 
+their respective distribution directories.
 
 Good luck!
 
