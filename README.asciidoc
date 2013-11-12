@@ -4,7 +4,8 @@ Getting Started from Source
 Project Overlord consists of a repository (S-RAMP), Design Time Governance (DTGov) and Run Time Governance (RTGov).
 This script will build S-RAMP and DTGov. Both of these projects have a GUI component. All components share login 
 information using SAML bearer tokens. The SSO code lives in a shared project called overlord-commons. Because of
-these SSO complexities we currently only support deploying to JBossEAP
+these SSO complexities we currently only support deploying to JBossEAP, but Eric is working hard on adding a
+deployment on Tomcat-7.
 
 1. Check out the code from Governance on Github
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,7 +29,7 @@ ant install
 
 4. Deploy to JBossEAP
 ~~~~~~~~~~~~~~~~~~~~~
-When both 2 and 3 are finished you can deploy to JBossEAP by running
+When both step 2 and 3 are finished you can deploy to JBossEAP by running
 ....
 ant deploy
 ....
@@ -57,8 +58,9 @@ Make sure JBossEAP is fully booted up before you start the seeding
 ant seed
 ....
 This will upload the ontologies as well as the workflows. You can verify
-success using the s-ramp-ui. For now you will need to reboot JBossEAP
-to activate the workflows.
+success using the s-ramp-ui. For now you will need to *reboot* JBossEAP
+to activate the workflows. Demos for both S-RAMP and DTGov are available in 
+their respective distribution directories.
 
 Good luck!
 
