@@ -1,0 +1,77 @@
+Getting Started from Source
+---------------------------
+
+Project Overlord consists of a repository (S-RAMP), Design Time Governance (DTGov) and Run Time Governance (RTGov).
+This script will build S-RAMP and DTGov. Both of these projects have a GUI component. All components share login 
+information using SAML bearer tokens. The SSO code lives in a shared project called overlord-commons. Because of
+these SSO complexities we currently only support deploying to JBossEAP
+
+1. Check out the code from Governance on Github
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This clones overlord-commons, s-ramp and dtgov from github. If you want to check out your own clones, then you can
+update the urls in the build.properties file.
+....
+ant clone
+....
+going forward you can update using _ant pull_.
+
+2. Dowload JBossEAP-6.1
+~~~~~~~~~~~~~~~~~~~~~~~
+Navigate to http://www.jboss.org/jbossas/downloads, login and download JBoss-6.1.0.Final.zip to this directory.
+
+3. Build
+~~~~~~~~
+While your download is running you can kick off the build
+....
+ant install
+....
+
+4. Deploy to JBossEAP
+~~~~~~~~~~~~~~~~~~~~~
+When both 2 and 3 are finished you can deploy to JBossEAP by running
+....
+ant deploy
+....
+
+When ready start of EAP in standalone mode (jboss-eap-6.1/bin/startalone.sh) using a different shell
+
+5. Seed
+~~~~~~~
+You can now add the following section to your .m2/settings.xml
+....
+<server>
+   <id>local-sramp-repo-snapshots</id>
+   <username>admin</username>
+   <password>your-admin-password</password>
+</server>
+<server>
+   <id>local-sramp-repo-snapshots</id>
+   <username>admin</username>
+   <password>your-admin-password<</password>
+</server>
+....
+Insert the admin password you supplied during step 4.
+
+Make sure JBossEAP is fully booted up before you start the seeding
+....
+ant seed
+....
+This will upload the ontologies as well as the workflows. You can verify
+success using the s-ramp-ui. For now you will need to reboot JBossEAP
+to activate the workflows.
+
+Good luck!
+
+Please use the overlord user forum if you need help or have any other questions.
+We hope you will become part of our community and start writing your own
+extensions. Looking forward to seeing some good Git pull requests.
+
+Cheers,
+
+The Overlord team.
+
+.Other useful getting started links:
+* http://www.jboss.org/overlord/
+* https://github.com/Governance/s-ramp/wiki/GuideGettingStarted
+* https://github.com/Governance/dtgov/wiki/GuideGettingStarted
+

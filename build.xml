@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Governance Install From Source" default="install">
+
+  <macrodef name = "git">
+    <attribute name = "command" />
+    <attribute name = "dir" default = "" />
+    <element name = "args" optional = "true" />
+    <sequential>
+        <echo message = "git @{command}" />
+        <exec executable = "git" dir = "@{dir}">
+            <arg value = "@{command}" />
+            <args/>
+        </exec>
+    </sequential>
+  </macrodef>
+
+  <macrodef name = "git-clone-pull">
+    <attribute name = "repository" />
+    <attribute name = "dest" />
+    <sequential>
+        <git command = "clone">
+            <args>
+                <arg value = "@{repository}" />
+                <arg value = "@{dest}" />
+            </args>
+        </git>
+        <git command = "pull" dir = "@{dest}" />
+    </sequential>
+  </macrodef>
+
+  <property file="build.properties" />
+  <property name="appserver.id" value="jboss-eap-6.1" />
+  <property name="maven.executable" value="mvn" />
+  
+  <!-- Check which app server we're installing into -->
+  <target name="appserver-check">
+    <!-- Set some properties based on the value of appserver.id -->
+    <condition property="jboss-eap-6.1">
+      <equals arg1="${appserver.id}" arg2="jboss-eap-6.1" />
+    </condition>
+    <condition property="jboss-as-7.1.1.Final">
+      <equals arg1="${appserver.id}" arg2="jboss-as-7.1.1.Final" />
+    </condition>
+  </target>
+
+  <target name="clone">
+    <git command = "clone">
+      <args>
+        <arg value = "${git.governance.overlord-commons}" />
+      </args>
+    </git> 
+    <git command = "clone">
+      <args>
+        <arg value = "${git.governance.s-ramp}" />
+      </args>
+    </git>
+    <git command = "clone">
+      <args>
+        <arg value = "${git.governance.dtgov}" />
+      </args>
+    </git>
+  </target>
+
+  <target name="pull">
+    <git command = "pull" dir = "overlord-commons" />
+    <git command = "pull" dir = "s-ramp" />
+    <git command = "pull" dir = "dtgov" />
+  </target>
+
+  <target name="install">
+     <exec executable="${maven.executable}">
+        <arg value="-f" />
+	<arg value="overlord-commons/pom.xml" />
+        <arg value="clean" />
+	<arg value="install" />
+     </exec>
+     <exec executable="${maven.executable}">
+        <arg value="-f" />
+        <arg value="s-ramp/pom.xml" />
+        <arg value="clean" />
+        <arg value="install" />
+     </exec>
+     <exec executable="${maven.executable}">
+        <arg value="-f" />
+        <arg value="dtgov/pom.xml" />
+        <arg value="clean" />
+        <arg value="install" />
+     </exec>
+  </target>
+  
+
+  <target name="deploy">
+    <delete dir="${jbosseap}"/>
+    <delete dir="dtgov-${dtgov-version}"/>
+    <delete dir="s-ramp-${sramp.version}"/>
+    <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
+    <copy file="${jbosseap}.zip" todir="s-ramp-${sramp.version}/AS/EAP"/>
+    <ant antfile="build.xml" target="install" inheritrefs="false" dir="s-ramp-${sramp.version}">
+       <property name="overlord-commons.idp.download.url" value="file:s-ramp-${sramp.version}/bin/overlord-commons-idp-${overlord.commons.version}.war"/>
+       <property name="overlord-commons.auth.download.url" value="file:s-ramp-${sramp.version}/bin/overlord-commons-auth-${overlord.commons.version}.jar"/>
+       <property name="s-ramp.appserver.zip" value="AS/EAP/${jbosseap}.zip"/>
+    </ant>
+    <move file="s-ramp-${sramp.version}/target/jboss-eap-6.1" todir="."/>
+    <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
+    <ant antfile="build.xml" target="install" dir="dtgov-${dtgov.version}">
+       <property name="dtgov.install.dir" value="../"/>
+       <property name="dtgov.appserver.zip" value="../${jbosseap}.zip"/>
+    </ant>
+  </target>
+
+  <target name="seed">
+    <input message="Please supply the password for the admin user:" addproperty="admin.password" >
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
+    <echo file="dtgov-${dtgov.version}/cli-commands.txt" append="false">
+connect http://localhost:8080/s-ramp-server admin ${admin.password}
+ontology:upload dtgov-data/deployment-status.owl
+ontology:upload dtgov-data/project-review-status.owl
+       </echo>
+    <ant antfile="build.xml" target="seed" dir="dtgov-${dtgov.version}"/>
+    <exec executable="${maven.executable}">
+        <arg value="-f" />
+        <arg value="dtgov-${dtgov.version}/dtgov-data/pom.xml" />
+        <arg value="clean" />
+        <arg value="deploy" />
+     </exec>
+   </target>
+</project>
