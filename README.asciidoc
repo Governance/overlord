@@ -28,7 +28,7 @@ ant install
 
 4. Deploy to JBossEAP
 ~~~~~~~~~~~~~~~~~~~~~
-When both 2 and 3 are finished you can deploy to JBossEAP by running
+When both step 2 and 3 are finished you can deploy to JBossEAP by running
 ....
 ant deploy
 ....
