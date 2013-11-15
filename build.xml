@@ -73,24 +73,27 @@
 	<arg value="overlord-commons/pom.xml" />
         <arg value="clean" />
 	<arg value="install" />
+        <arg value="-DskipTests=true"/>
      </exec>
      <exec executable="${maven.executable}">
         <arg value="-f" />
         <arg value="s-ramp/pom.xml" />
         <arg value="clean" />
         <arg value="install" />
+        <arg value="-DskipTests=true"/>
      </exec>
      <exec executable="${maven.executable}">
         <arg value="-f" />
         <arg value="dtgov/pom.xml" />
         <arg value="clean" />
         <arg value="install" />
+        <arg value="-DskipTests=true"/>
      </exec>
   </target>
   
 
   <target name="deploy">
-    <delete dir="${jbosseap}"/>
+    <delete dir="jboss-eap-6.1"/>
     <delete dir="dtgov-${dtgov-version}"/>
     <delete dir="s-ramp-${sramp.version}"/>
     <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
