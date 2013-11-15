@@ -16,9 +16,9 @@ ant clone
 ....
 going forward you can update using _ant pull_.
 
-2. Dowload JBossEAP-6.1
-~~~~~~~~~~~~~~~~~~~~~~~
-Navigate to http://www.jboss.org/jbossas/downloads, login and download JBoss-6.1.0.Final.zip to this directory.
+2. Download EAP 6.1.0 Final
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Navigate to http://www.jboss.org/jbossas/downloads then login and download EAP 6.1.0 Final (jboss-eap-6.1.0.zip) to this directory.
 
 3. Build
 ~~~~~~~~
