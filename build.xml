@@ -114,7 +114,7 @@
     <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="s-ramp-${sramp.version}">
       <property name="s-ramp-distro.choices.platform.tomcat-7.path" value=""/>
     </ant>
-    <move todir=".">
+    <move todir="apache-tomcat-7.0.47">
       <fileset dir="s-ramp-${sramp.version}/apache-tomcat-7.0.47"/>
     </move>
     <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
