@@ -96,18 +96,30 @@
     <delete dir="jboss-eap-6.1"/>
     <delete dir="dtgov-${dtgov-version}"/>
     <delete dir="s-ramp-${sramp.version}"/>
+    <unzip src="${jbosseap}.zip" dest="."/>
     <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
-    <copy file="${jbosseap}.zip" todir="s-ramp-${sramp.version}/AS/EAP"/>
-    <ant antfile="build.xml" target="install" inheritrefs="false" dir="s-ramp-${sramp.version}">
-       <property name="overlord-commons.idp.download.url" value="file:s-ramp-${sramp.version}/bin/overlord-commons-idp-${overlord.commons.version}.war"/>
-       <property name="overlord-commons.auth.download.url" value="file:s-ramp-${sramp.version}/bin/overlord-commons-auth-${overlord.commons.version}.jar"/>
-       <property name="s-ramp.appserver.zip" value="AS/EAP/${jbosseap}.zip"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="s-ramp-${sramp.version}">
+       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" value="../jboss-eap-6.1"/>
     </ant>
-    <move file="s-ramp-${sramp.version}/target/jboss-eap-6.1" todir="."/>
     <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
-    <ant antfile="build.xml" target="install" dir="dtgov-${dtgov.version}">
-       <property name="dtgov.install.dir" value="../"/>
-       <property name="dtgov.appserver.zip" value="../${jbosseap}.zip"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="dtgov-${dtgov.version}">
+       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" value="../jboss-eap-6.1"/>
+    </ant>
+  </target>
+
+  <target name="deploy-tomcat">
+    <delete dir="dtgov-${dtgov-version}"/>
+    <delete dir="s-ramp-${sramp.version}"/>
+    <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
+    <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="s-ramp-${sramp.version}">
+      <property name="s-ramp-distro.choices.platform.tomcat-7.path" value=""/>
+    </ant>
+    <move todir=".">
+      <fileset dir="s-ramp-${sramp.version}/apache-tomcat-7.0.47"/>
+    </move>
+    <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
+    <ant antfile="build.xml" target="install-tomcat-7" dir="dtgov-${dtgov.version}">
+      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="../apache-tomcat-7.0.47"/>
     </ant>
   </target>
 
@@ -115,7 +127,7 @@
     <input message="Please supply the password for the admin user:" addproperty="admin.password" >
       <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
     </input>
-    <echo file="dtgov-${dtgov.version}/cli-commands.txt" append="false">
+    <echo file="dtgov-${dtgov.version}/.temp/dtgov-installer/cli-commands.txt" append="false">
 connect http://localhost:8080/s-ramp-server admin ${admin.password}
 ontology:upload dtgov-data/deployment-status.owl
 ontology:upload dtgov-data/project-review-status.owl
