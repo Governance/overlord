@@ -3,3 +3,17 @@ jboss-eap-6.1.?.zip
 dtgov
 overlord-commons
 s-ramp
+LICENSE
+NOTICE
+RELEASE-NOTES
+RUNNING.txt
+apache-tomcat-*/
+bin/
+conf/
+dtgov-*/
+jboss-eap-*/
+lib/
+overlord-commons-installer/
+s-ramp-0.4.0-SNAPSHOT/
+temp/
+webapps/
