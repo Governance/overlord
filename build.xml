@@ -94,7 +94,7 @@
 
   <target name="deploy">
     <delete dir="jboss-eap-6.1"/>
-    <delete dir="dtgov-${dtgov-version}"/>
+    <delete dir="dtgov-${dtgov.version}"/>
     <delete dir="s-ramp-${sramp.version}"/>
     <unzip src="${jbosseap}.zip" dest="."/>
     <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
@@ -114,12 +114,12 @@
     <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="s-ramp-${sramp.version}">
       <property name="s-ramp-distro.choices.platform.tomcat-7.path" value=""/>
     </ant>
-    <move todir="apache-tomcat-7.0.47">
-      <fileset dir="s-ramp-${sramp.version}/apache-tomcat-7.0.47"/>
+    <move todir="apache-tomcat-${tomcat.version}">
+      <fileset dir="s-ramp-${sramp.version}/apache-tomcat-${tomcat.version}"/>
     </move>
     <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
     <ant antfile="build.xml" target="install-tomcat-7" dir="dtgov-${dtgov.version}">
-      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="../apache-tomcat-7.0.47"/>
+      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="../apache-tomcat-${tomcat.version}"/>
     </ant>
   </target>
 
