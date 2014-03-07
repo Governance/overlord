@@ -18,6 +18,7 @@ going forward you can update using _ant pull_.
 
 2. Download EAP 6.1.0 Final
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You can skip this step if you're going to deploy on tomcat.
 Navigate to http://www.jboss.org/jbossas/downloads then login and download EAP 6.1.0 Final (jboss-eap-6.1.0.zip) to this directory.
 
 3. Build
@@ -27,14 +28,26 @@ While your download is running you can kick off the build
 ant install
 ....
 
-4. Deploy to JBossEAP
-~~~~~~~~~~~~~~~~~~~~~
+4. Deploy
+~~~~~~~~~
+
+Option 1. Deploy to JBossEAP
+
 When both step 2 and 3 are finished you can deploy to JBossEAP by running
 ....
 ant deploy
 ....
 
-When ready start of EAP in standalone mode (jboss-eap-6.1/bin/startalone.sh) using a different shell
+When ready, start EAP in standalone mode (jboss-eap-6.1/bin/standalone.sh) using a different shell
+
+Option 2. Deploy to Tomcat
+
+When step 2 is finished you can deploy to Tomcat by running
+....
+ant deploy-tomcat
+....
+
+When ready, start Tomcat (apache-tomcat-<version>/bin/start.sh) using a different shell
 
 5. Seed
 ~~~~~~~
