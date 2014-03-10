@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Governance Install From Source" default="install">
+<project name="Governance Install From Source" default="install" basedir=".">
 
   <macrodef name = "git">
     <attribute name = "command" />
@@ -47,44 +47,47 @@
     <git command = "clone">
       <args>
         <arg value = "${git.governance.overlord-commons}" />
+        <arg value = "src/overlord-commons" />
       </args>
     </git> 
     <git command = "clone">
       <args>
         <arg value = "${git.governance.s-ramp}" />
+        <arg value = "src/s-ramp" />
       </args>
     </git>
     <git command = "clone">
       <args>
         <arg value = "${git.governance.dtgov}" />
+        <arg value = "src/dtgov" />
       </args>
     </git>
   </target>
 
   <target name="pull">
-    <git command = "pull" dir = "overlord-commons" />
-    <git command = "pull" dir = "s-ramp" />
-    <git command = "pull" dir = "dtgov" />
+    <git command = "pull" dir = "src/overlord-commons" />
+    <git command = "pull" dir = "src/s-ramp" />
+    <git command = "pull" dir = "src/dtgov" />
   </target>
 
   <target name="install">
      <exec executable="${maven.executable}">
         <arg value="-f" />
-	<arg value="overlord-commons/pom.xml" />
+	<arg value="src/overlord-commons/pom.xml" />
         <arg value="clean" />
 	<arg value="install" />
         <arg value="-DskipTests=true"/>
      </exec>
      <exec executable="${maven.executable}">
         <arg value="-f" />
-        <arg value="s-ramp/pom.xml" />
+        <arg value="src/s-ramp/pom.xml" />
         <arg value="clean" />
         <arg value="install" />
         <arg value="-DskipTests=true"/>
      </exec>
      <exec executable="${maven.executable}">
         <arg value="-f" />
-        <arg value="dtgov/pom.xml" />
+        <arg value="src/dtgov/pom.xml" />
         <arg value="clean" />
         <arg value="install" />
         <arg value="-DskipTests=true"/>
@@ -93,33 +96,32 @@
   
 
   <target name="deploy">
-    <delete dir="jboss-eap-6.1"/>
-    <delete dir="dtgov-${dtgov.version}"/>
-    <delete dir="s-ramp-${sramp.version}"/>
-    <unzip src="${jbosseap}.zip" dest="."/>
-    <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
-    <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="s-ramp-${sramp.version}">
-       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" value="../jboss-eap-6.1"/>
+    <delete dir="target"/>
+    <mkdir dir="target"/>
+    <unzip src="${jbosseap}.zip" dest="target"/>
+    <unzip src="src/s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="target"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="target/s-ramp-${sramp.version}">
+       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" value="${basedir}/target/jboss-eap-6.1"/>
     </ant>
-    <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
-    <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="dtgov-${dtgov.version}">
-       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" value="../jboss-eap-6.1"/>
+    <unzip src="src/dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="target"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="target/dtgov-${dtgov.version}">
+       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" value="${basedir}/target/jboss-eap-6.1"/>
     </ant>
   </target>
 
   <target name="deploy-tomcat">
-    <delete dir="dtgov-${dtgov-version}"/>
-    <delete dir="s-ramp-${sramp.version}"/>
-    <unzip src="s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="."/>
-    <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="s-ramp-${sramp.version}">
+    <delete dir="target"/>
+    <mkdir dir="target"/>
+    <unzip src="src/s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="target"/>
+    <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="target/s-ramp-${sramp.version}">
       <property name="s-ramp-distro.choices.platform.tomcat-7.path" value=""/>
     </ant>
-    <move todir="apache-tomcat-${tomcat.version}">
-      <fileset dir="s-ramp-${sramp.version}/apache-tomcat-${tomcat.version}"/>
+    <move todir="target/apache-tomcat-${tomcat.version}">
+      <fileset dir="target/s-ramp-${sramp.version}/apache-tomcat-${tomcat.version}"/>
     </move>
-    <unzip src="dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="."/>
-    <ant antfile="build.xml" target="install-tomcat-7" dir="dtgov-${dtgov.version}">
-      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="../apache-tomcat-${tomcat.version}"/>
+    <unzip src="src/dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="target"/>
+    <ant antfile="build.xml" target="install-tomcat-7" dir="target/dtgov-${dtgov.version}">
+      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="${basedir}/target/apache-tomcat-${tomcat.version}"/>
     </ant>
   </target>
 
@@ -127,15 +129,15 @@
     <input message="Please supply the password for the admin user:" addproperty="admin.password" >
       <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
     </input>
-    <echo file="dtgov-${dtgov.version}/.temp/dtgov-installer/cli-commands.txt" append="false">
+    <echo file="target/dtgov-${dtgov.version}/.temp/dtgov-installer/cli-commands.txt" append="false">
 connect http://localhost:8080/s-ramp-server admin ${admin.password}
 ontology:upload dtgov-data/deployment-status.owl
 ontology:upload dtgov-data/project-review-status.owl
        </echo>
-    <ant antfile="build.xml" target="seed" dir="dtgov-${dtgov.version}"/>
+    <ant antfile="build.xml" target="seed" dir="target/dtgov-${dtgov.version}"/>
     <exec executable="${maven.executable}">
         <arg value="-f" />
-        <arg value="dtgov-${dtgov.version}/dtgov-data/pom.xml" />
+        <arg value="target/dtgov-${dtgov.version}/dtgov-data/pom.xml" />
         <arg value="clean" />
         <arg value="deploy" />
      </exec>
