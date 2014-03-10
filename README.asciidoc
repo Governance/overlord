@@ -4,8 +4,7 @@ Getting Started from Source
 Project Overlord consists of a repository (S-RAMP), Design Time Governance (DTGov) and Run Time Governance (RTGov).
 This script will build S-RAMP and DTGov. Both of these projects have a GUI component. All components share login 
 information using SAML bearer tokens. The SSO code lives in a shared project called overlord-commons. Because of
-these SSO complexities we currently only support deploying to JBossEAP, but Eric is working hard on adding a
-deployment on Tomcat-7.
+these SSO complexities we currently support deploying to JBossEAP and Tomcat-7.
 
 1. Check out the code from Governance on Github
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,7 +65,7 @@ You can now add the following section to your .m2/settings.xml
 ....
 Insert the admin password you supplied during step 4.
 
-Make sure JBossEAP is fully booted up before you start the seeding
+Make sure the applications are fully booted up before you start the seeding
 ....
 ant seed
 ....
