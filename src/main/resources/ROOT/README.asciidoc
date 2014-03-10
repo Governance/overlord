@@ -1,0 +1,64 @@
+Getting Started
+---------------
+
+1. Deploy
+~~~~~~~~~
+
+Option 1. Deploy to JBossEAP. First you need to navigate to 
+http://www.jboss.org/jbossas/downloads then login and download 
+EAP 6.1.1 Final (jboss-eap-6.1.1.zip) to this directory.
+
+then
+....
+ant deploy
+....
+When ready, start EAP in standalone mode (jboss-eap-6.1/bin/standalone.sh) using a different shell
+
+Option 2. Deploy to Tomcat
+
+....
+ant deploy-tomcat
+....
+
+When ready, start Tomcat (apache-tomcat-<version>/bin/start.sh) using a different shell
+
+2. Seed
+~~~~~~~
+You can now add the following section to your .m2/settings.xml
+....
+<server>
+   <id>local-sramp-repo-snapshots</id>
+   <username>admin</username>
+   <password>your-admin-password</password>
+</server>
+<server>
+   <id>local-sramp-repo-snapshots</id>
+   <username>admin</username>
+   <password>your-admin-password</password>
+</server>
+....
+Insert the admin password you supplied during step 1.
+
+Make sure the applications are fully booted up before you start the seeding
+....
+ant seed
+....
+This will upload the ontologies as well as the workflows. You can verify
+success using the s-ramp-ui. Demos for both S-RAMP and DTGov are available in 
+their respective distribution directories.
+
+Good luck!
+
+Please use the overlord user forum if you need help or have any other questions.
+We hope you will become part of our community and start writing your own
+extensions. Looking forward to seeing some good Git pull requests.
+
+Cheers,
+
+The Overlord team.
+
+.Other useful getting started links:
+* http://www.jboss.org/overlord/
+* https://github.com/Governance/s-ramp/wiki/GuideGettingStarted
+* https://github.com/Governance/dtgov/wiki/GuideGettingStarted
+

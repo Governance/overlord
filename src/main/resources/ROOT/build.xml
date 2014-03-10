@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Governance Install From Source" default="deploy" basedir=".">
+
+  <property file="build.properties" />
+  <property name="appserver.id" value="jboss-eap-6.1" />
+  <property name="maven.executable" value="mvn" />
+  
+  <!-- Check which app server we're installing into -->
+  <target name="appserver-check">
+    <!-- Set some properties based on the value of appserver.id -->
+    <condition property="jboss-eap-6.1">
+      <equals arg1="${appserver.id}" arg2="jboss-eap-6.1" />
+    </condition>
+    <condition property="jboss-as-7.1.1.Final">
+      <equals arg1="${appserver.id}" arg2="jboss-as-7.1.1.Final" />
+    </condition>
+  </target>
+
+  <target name="deploy">
+    <delete dir="jboss-eap-6.1"/>
+    <unzip src="${jbosseap}.zip" dest="jboss-eap-6.1"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="s-ramp-${sramp.version}">
+       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" value="jboss-eap-6.1"/>
+    </ant>
+    <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="dtgov-${dtgov.version}">
+       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" value="${basedir}/jboss-eap-6.1"/>
+    </ant>
+  </target>
+
+  <target name="deploy-tomcat">
+    <delete dir="apache-tomcat-${tomcat.version}"/>
+    <mkdir dir="apache-tomcat-${tomcat.version}"/>
+    <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="s-ramp-${sramp.version}">
+      <property name="s-ramp-distro.choices.platform.tomcat-7.path" value=""/>
+    </ant>
+    <move todir="apache-tomcat-${tomcat.version}">
+      <fileset dir="s-ramp-${sramp.version}/apache-tomcat-${tomcat.version}"/>
+    </move>
+    <ant antfile="build.xml" target="install-tomcat-7" dir="dtgov-${dtgov.version}">
+      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="${basedir}/apache-tomcat-${tomcat.version}"/>
+    </ant>
+  </target>
+
+  <target name="seed">
+    <input message="Please supply the password for the admin user:" addproperty="admin.password" >
+      <handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+    </input>
+    <echo file="dtgov-${dtgov.version}/.temp/dtgov-installer/cli-commands.txt" append="false">
+connect http://localhost:8080/s-ramp-server admin ${admin.password}
+ontology:upload dtgov-data/deployment-status.owl
+ontology:upload dtgov-data/project-review-status.owl
+       </echo>
+    <ant antfile="build.xml" target="seed" dir="dtgov-${dtgov.version}"/>
+    <exec executable="${maven.executable}">
+        <arg value="-f" />
+        <arg value="dtgov-${dtgov.version}/dtgov-data/pom.xml" />
+        <arg value="clean" />
+        <arg value="deploy" />
+     </exec>
+   </target>
+</project>
