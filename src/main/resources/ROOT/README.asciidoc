@@ -1,6 +1,7 @@
 Getting Started
 ---------------
 
+
 1. Deploy
 ~~~~~~~~~
 
@@ -9,9 +10,11 @@ http://www.jboss.org/jbossas/downloads then login and download
 EAP 6.1.1 Final (jboss-eap-6.1.1.zip) to this directory.
 
 then
+
 ....
 ant deploy
 ....
+
 When ready, start EAP in standalone mode (jboss-eap-6.1/bin/standalone.sh) using a different shell
 
 Option 2. Deploy to Tomcat
@@ -20,10 +23,18 @@ Option 2. Deploy to Tomcat
 ant deploy-tomcat
 ....
 
-When ready, start Tomcat (apache-tomcat-<version>/bin/start.sh) using a different shell
+When ready, start Tomcat (apache-tomcat-<version>/bin/startup.sh). 
 
-2. Seed
+2. When all the applications
+are booted up, open your browser and navigate to.
+
+http://localhost:8080/s-ramp-ui
+
+when successful you can move onto step 3.
+
+3. Seed
 ~~~~~~~
+
 You can now add the following section to your .m2/settings.xml
 ....
 <server>
