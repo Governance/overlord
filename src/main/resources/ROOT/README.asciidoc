@@ -12,7 +12,7 @@ EAP 6.1.1 Final (jboss-eap-6.1.1.zip) to this directory.
 then
 
 ....
-ant deploy
+ant deploy-eap
 ....
 
 When ready, start EAP in standalone mode (jboss-eap-6.1/bin/standalone.sh) using a different shell

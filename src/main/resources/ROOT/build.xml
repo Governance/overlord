@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Governance Install From Source" default="deploy" basedir=".">
+<project name="Governance Install From Source" default="deploy-eap" basedir=".">
 
   <property file="build.properties" />
   <property name="appserver.id" value="jboss-eap-6.1" />
@@ -16,18 +16,30 @@
     </condition>
   </target>
 
-  <target name="deploy">
+  <target name="unpack">
+    <unzip src="s-ramp-${sramp.version}.zip" dest="${basedir}"/>
+    <chmod perm="a+x" dir="${basedir}/s-ramp-${sramp.version}/bin">
+       <include name="*.sh"/>
+    </chmod>
+    <unzip src="overlord-dtgov-${dtgov.version}.zip" dest="${basedir}"/>
+  </target>
+
+  <target name="deploy-eap" depends="unpack">
     <delete dir="jboss-eap-6.1"/>
-    <unzip src="${jbosseap}.zip" dest="jboss-eap-6.1"/>
+    <unzip src="${jbosseap}.zip" dest="${basedir}"/>
+    <chmod perm="a+x" dir="${basedir}/jboss-eap-6.1/bin">
+       <include name="*.sh"/>
+    </chmod>
+
     <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="s-ramp-${sramp.version}">
-       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" value="jboss-eap-6.1"/>
+       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" location="${basedir}/jboss-eap-6.1"/>
     </ant>
     <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="dtgov-${dtgov.version}">
-       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" value="${basedir}/jboss-eap-6.1"/>
+       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" location="${basedir}/jboss-eap-6.1"/>
     </ant>
   </target>
 
-  <target name="deploy-tomcat">
+  <target name="deploy-tomcat" depends="unpack">
     <delete dir="apache-tomcat-${tomcat.version}"/>
     <mkdir dir="apache-tomcat-${tomcat.version}"/>
     <ant antfile="build.xml" target="install-tomcat-7" inheritrefs="false" dir="s-ramp-${sramp.version}">
@@ -37,7 +49,7 @@
       <fileset dir="s-ramp-${sramp.version}/apache-tomcat-${tomcat.version}"/>
     </move>
     <ant antfile="build.xml" target="install-tomcat-7" dir="dtgov-${dtgov.version}">
-      <property name="dtgov-distro.choices.platform.tomcat-7.path" value="${basedir}/apache-tomcat-${tomcat.version}"/>
+      <property name="dtgov-distro.choices.platform.tomcat-7.path" location="${basedir}/apache-tomcat-${tomcat.version}"/>
     </ant>
   </target>
 
