@@ -25,7 +25,7 @@
     <groupId>org.overlord</groupId>
 	<artifactId>overlord-distr</artifactId>
 	<name>Overlord Distribution</name>
-	<version>1.0.0.Final</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	 <build>
     <plugins>
