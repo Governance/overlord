@@ -95,7 +95,7 @@
   </target>
   
 
-  <target name="deploy">
+  <target name="deploy-eap">
     <delete dir="target"/>
     <mkdir dir="target"/>
     <unzip src="${jbosseap}.zip" dest="target"/>

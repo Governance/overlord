@@ -38,7 +38,7 @@ when successful you can move onto step 3.
 You can now add the following section to your .m2/settings.xml
 ....
 <server>
-   <id>local-sramp-repo-snapshots</id>
+   <id>local-sramp-repo</id>
    <username>admin</username>
    <password>your-admin-password</password>
 </server>
