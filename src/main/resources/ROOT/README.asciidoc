@@ -7,7 +7,7 @@ Getting Started
 
 Option 1. Deploy to JBossEAP. First you need to navigate to 
 http://www.jboss.org/jbossas/downloads then login and download 
-EAP 6.1.1 Final (jboss-eap-6.1.1.zip) to this directory.
+EAP 6.x.0 Final (jboss-eap-6.x.0.zip) to this directory.
 
 then
 
@@ -15,7 +15,7 @@ then
 ant deploy-eap
 ....
 
-When ready, start EAP in standalone mode (jboss-eap-6.1/bin/standalone.sh) using a different shell
+When ready, start EAP in standalone mode (jboss-eap-6.x/bin/standalone.sh) using a different shell
 
 Option 2. Deploy to Tomcat
 

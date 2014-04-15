@@ -29,14 +29,14 @@
   </macrodef>
 
   <property file="build.properties" />
-  <property name="appserver.id" value="jboss-eap-6.1" />
+  <property name="appserver.id" value="jboss-eap-6" />
   <property name="maven.executable" value="mvn" />
   
   <!-- Check which app server we're installing into -->
   <target name="appserver-check">
     <!-- Set some properties based on the value of appserver.id -->
-    <condition property="jboss-eap-6.1">
-      <equals arg1="${appserver.id}" arg2="jboss-eap-6.1" />
+    <condition property="jboss-eap-6">
+      <equals arg1="${appserver.id}" arg2="jboss-eap-6" />
     </condition>
     <condition property="jboss-as-7.1.1.Final">
       <equals arg1="${appserver.id}" arg2="jboss-as-7.1.1.Final" />
@@ -100,12 +100,12 @@
     <mkdir dir="target"/>
     <unzip src="${jbosseap}.zip" dest="target"/>
     <unzip src="src/s-ramp/s-ramp-distro/s-ramp-distro-assembly/target/s-ramp-${sramp.version}.zip" dest="target"/>
-    <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="target/s-ramp-${sramp.version}">
-       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" value="${basedir}/target/jboss-eap-6.1"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6" inheritrefs="false" dir="target/s-ramp-${sramp.version}">
+       <property name="s-ramp-distro.choices.platform.jboss-eap-6.path" value="${basedir}/target/jboss-eap-6"/>
     </ant>
     <unzip src="src/dtgov/dtgov-distro/target/dtgov-${dtgov.version}.zip" dest="target"/>
-    <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="target/dtgov-${dtgov.version}">
-       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" value="${basedir}/target/jboss-eap-6.1"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6" dir="target/dtgov-${dtgov.version}">
+       <property name="dtgov-distro.choices.platform.jboss-eap-6.path" value="${basedir}/target/jboss-eap-6"/>
     </ant>
   </target>
 
