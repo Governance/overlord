@@ -2,14 +2,14 @@
 <project name="Governance Install From Source" default="deploy-eap" basedir=".">
 
   <property file="build.properties" />
-  <property name="appserver.id" value="jboss-eap-6.1" />
+  <property name="appserver.id" value="jboss-eap-6" />
   <property name="maven.executable" value="mvn" />
   
   <!-- Check which app server we're installing into -->
   <target name="appserver-check">
     <!-- Set some properties based on the value of appserver.id -->
-    <condition property="jboss-eap-6.1">
-      <equals arg1="${appserver.id}" arg2="jboss-eap-6.1" />
+    <condition property="jboss-eap-6">
+      <equals arg1="${appserver.id}" arg2="jboss-eap-6" />
     </condition>
     <condition property="jboss-as-7.1.1.Final">
       <equals arg1="${appserver.id}" arg2="jboss-as-7.1.1.Final" />
@@ -25,17 +25,17 @@
   </target>
 
   <target name="deploy-eap" depends="unpack">
-    <delete dir="jboss-eap-6.1"/>
+    <delete dir="jboss-eap-6"/>
     <unzip src="${jbosseap}.zip" dest="${basedir}"/>
-    <chmod perm="a+x" dir="${basedir}/jboss-eap-6.1/bin">
+    <chmod perm="a+x" dir="${basedir}/jboss-eap-6/bin">
        <include name="*.sh"/>
     </chmod>
 
-    <ant antfile="build.xml" target="install-jboss-eap-6.1" inheritrefs="false" dir="s-ramp-${sramp.version}">
-       <property name="s-ramp-distro.choices.platform.jboss-eap-6.1.path" location="${basedir}/jboss-eap-6.1"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6" inheritrefs="false" dir="s-ramp-${sramp.version}">
+       <property name="s-ramp-distro.choices.platform.jboss-eap-6.path" location="${basedir}/jboss-eap-6"/>
     </ant>
-    <ant antfile="build.xml" target="install-jboss-eap-6.1" dir="dtgov-${dtgov.version}">
-       <property name="dtgov-distro.choices.platform.jboss-eap-6.1.path" location="${basedir}/jboss-eap-6.1"/>
+    <ant antfile="build.xml" target="install-jboss-eap-6" dir="dtgov-${dtgov.version}">
+       <property name="dtgov-distro.choices.platform.jboss-eap-6.path" location="${basedir}/jboss-eap-6"/>
     </ant>
   </target>
 

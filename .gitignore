@@ -3,3 +3,4 @@ jboss-eap-6.1.?.zip
 .errai
 target/
 jboss-eap-*/
+/.settings
